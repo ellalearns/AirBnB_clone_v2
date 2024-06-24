@@ -122,7 +122,18 @@ class HBNBCommand(cmd.Cmd):
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        kws = {}
+        if len(args) > 1:
+            for arg in args:
+                parsedArg = self.parse_command(arg)
+                if parsedArg == None:
+                    pass
+                else:
+                    kws[parsedArg['keyName']] = parsedArg['value']
         new_instance = HBNBCommand.classes[args[0]]()
+        if kws:
+            for key, value in kws.items():
+                setattr(new_instance, key, value)
         storage.save()
         print(new_instance.id)
         storage.save()
