@@ -15,7 +15,7 @@ class FileStorage:
         else:
             return {key: value
                     for key, value in FileStorage.__objects.items()
-                    if key.startswith(cls)}
+                    if value['__class__'] == cls}
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
