@@ -118,13 +118,37 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        args = args.split()
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[args[0]]()
         storage.save()
         print(new_instance.id)
         storage.save()
+    
+    def parse_command(self, args):
+        """
+        parses create <Class name> <param 1> <param 2> <param 3> ...
+        where param syntax is: <key name>=<value>
+        returns a json obj containing key and value
+        """
+        if "=" not in args:
+            return None
+        args = args.split("=")
+        keyName = args[0]
+        value = None
+        if '"' == args[1][0] and '"' == args[1][-1]:
+            value = (str(args[1][1:-1])).split('_')
+            value = ' '.join(value)
+        elif '.' in args[1]:
+            value = float(args[1])
+        else:
+            value = int(args[1])
+        return {
+            "keyName": keyName,
+            "value": value
+        }
 
     def help_create(self):
         """ Help information for the create method """
